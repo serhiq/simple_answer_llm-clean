@@ -227,11 +227,11 @@ func (c *Client) GetDocument(ctx context.Context, docID string, storeID *string)
 	return resp, nil
 }
 
-func (c *Client) GetSalesMetrics(ctx context.Context, from, to time.Time, documentType *string) (SalesMetrics, error) {
+func (c *Client) GetSalesMetrics(ctx context.Context, from, to time.Time, storeID *string, documentType *string) (SalesMetrics, error) {
 	if !c.hasToken() {
 		return SalesMetrics{}, ErrMissingToken
 	}
-	resolvedStoreID, err := c.resolveStoreID(nil)
+	resolvedStoreID, err := c.resolveStoreID(storeID)
 	if err != nil {
 		return SalesMetrics{}, err
 	}

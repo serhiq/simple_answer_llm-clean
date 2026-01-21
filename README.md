@@ -59,4 +59,5 @@ Optional:
 ## Notes
 - Current output is a placeholder until tool integrations and LLM orchestration are implemented.
 - Commit style follows `evotor-notes-backend` (e.g. `feat: ...`, `docs: ...`, optional `[scope] ...`).
- - If a month is provided without a year, the CLI uses the текущий год and states it explicitly (both REPL and one-shot).
+- If a month is provided without a year, the CLI uses the текущий год and states it explicitly (both REPL and one-shot).
+- If `EVOTOR_STORE_ID` is not set, the assistant can call `ListStores` and then pass `store_id` in tool calls.

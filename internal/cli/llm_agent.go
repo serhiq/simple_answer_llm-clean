@@ -158,32 +158,23 @@ func dispatchToolCall(ctx context.Context, logger *zap.Logger, evotorClient *evo
 		if err != nil {
 			return nil, toolCallRecord{Name: name, Args: args, OK: false, Err: err.Error()}, err
 		}
+		storeID := getStoreIDArg(args, opts.EvotorStoreID)
 		documentType, _ := getStringArg(args, "document_type")
 		return trackCall(logger, name, args, func() (evotor.SalesMetrics, error) {
 			var docType *string
 			if documentType != "" {
 				docType = &documentType
 			}
-			return evotorClient.GetSalesMetrics(ctx, from, to, docType)
+			return evotorClient.GetSalesMetrics(ctx, from, to, optionalString(storeID), docType)
 		})
 	case "ListStores":
-		if strings.TrimSpace(opts.EvotorStoreID) != "" {
-			record := toolCallRecord{
-				Name: name,
-				Args: args,
-				MS:   0,
-				OK:   true,
-			}
-			logToolRecord(logger, record)
-			return []evotor.Store{}, record, nil
-		}
 		return trackCall(logger, name, args, func() ([]evotor.Store, error) {
 			return evotorClient.ListStores(ctx)
 		})
 	case "SearchItems":
 		query, _ := getStringArg(args, "query")
 		limit := getIntArg(args, "limit", defaultOutputLimit)
-		storeID := strings.TrimSpace(opts.EvotorStoreID)
+		storeID := getStoreIDArg(args, opts.EvotorStoreID)
 		return trackCall(logger, name, args, func() ([]evotor.Item, error) {
 			return evotorClient.SearchItems(ctx, query, limit, optionalString(storeID))
 		})
@@ -198,7 +189,7 @@ func dispatchToolCall(ctx context.Context, logger *zap.Logger, evotorClient *evo
 		}
 		limit := getIntArg(args, "limit", defaultDocLimit)
 		offset := getIntArg(args, "offset", 0)
-		storeID := strings.TrimSpace(opts.EvotorStoreID)
+		storeID := getStoreIDArg(args, opts.EvotorStoreID)
 		itemQuery, _ := getStringArg(args, "item_query")
 		if strings.TrimSpace(itemQuery) == "" {
 			return trackCall(logger, name, args, func() ([]evotor.DocumentShort, error) {
@@ -216,7 +207,7 @@ func dispatchToolCall(ctx context.Context, logger *zap.Logger, evotorClient *evo
 		return filtered, record, filterErr
 	case "GetDocument":
 		docID, _ := getStringArg(args, "doc_id")
-		storeID := strings.TrimSpace(opts.EvotorStoreID)
+		storeID := getStoreIDArg(args, opts.EvotorStoreID)
 		return trackCall(logger, name, args, func() (evotor.DocumentFull, error) {
 			return evotorClient.GetDocument(ctx, docID, optionalString(storeID))
 		})

@@ -35,6 +35,10 @@ func getSalesMetricsTool() openrouter.Tool {
 						"type":        "string",
 						"description": "Document type to count. Use 'SELL' for sales only (default). Use 'ALL' to include all types (SELL, RETURN, REFUND).",
 					},
+					"store_id": map[string]any{
+						"type":        "string",
+						"description": "Optional store ID. Use when the user selected a specific store; otherwise omit to use the default store.",
+					},
 				},
 				"required":             []string{"from", "to"},
 				"additionalProperties": false,
@@ -75,6 +79,10 @@ func searchItemsTool() openrouter.Tool {
 						"type":        "integer",
 						"description": "Maximum number of items to return (default: 10, max: 50).",
 					},
+					"store_id": map[string]any{
+						"type":        "string",
+						"description": "Optional store ID. Use when the user selected a specific store; otherwise omit to use the default store.",
+					},
 				},
 				"required":             []string{"query"},
 				"additionalProperties": false,
@@ -114,6 +122,10 @@ func searchDocumentsTool() openrouter.Tool {
 						"type":        "string",
 						"description": "Optional text to search for in document positions. If provided, fetches full documents and filters locally to find items matching this query (case-insensitive).",
 					},
+					"store_id": map[string]any{
+						"type":        "string",
+						"description": "Optional store ID. Use when the user selected a specific store; otherwise omit to use the default store.",
+					},
 				},
 				"required":             []string{"from", "to"},
 				"additionalProperties": false,
@@ -134,6 +146,10 @@ func getDocumentTool() openrouter.Tool {
 					"doc_id": map[string]any{
 						"type":        "string",
 						"description": "Document ID to fetch.",
+					},
+					"store_id": map[string]any{
+						"type":        "string",
+						"description": "Optional store ID. Use when the user selected a specific store; otherwise omit to use the default store.",
 					},
 				},
 				"required":             []string{"doc_id"},
